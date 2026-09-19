@@ -2,7 +2,7 @@
 
 Review in this order:
 
-1. `Dockerfile`, `compose.yml`, and `vendor/client.pin` for supply-chain and
+1. `Dockerfile` and `compose.yml` for supply-chain and
    credential-boundary changes.
 2. `hackathon_competitor/state_machine.py` and `task_engine.py` for deterministic
    transition/DAG invariants.

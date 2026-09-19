@@ -1,7 +1,7 @@
 # Agent Index integration
 
-The image downloads the official client named in `vendor/client.pin`, verifies
-its SHA-256, and runs it as the unprivileged Hermes user under `s6`.
+The Plow base image ships the official client and its `agent-index` `s6`
+service; this repo does not carry a copy.
 
 `AGENT_ID` is an immutable external identifier. It is not the product name.
 It is operator-chosen (for example,
@@ -40,5 +40,7 @@ Generate the credential locally with `plow-agents login`, select a free line
 with `plow-agents lines`, and run `plow-agents mint <line-id>`. The resulting
 `./plow-credentials` file is secret-bearing and must remain outside GitHub.
 
-To update the client, review the upstream change, replace both the 40-character
-commit and SHA-256, build the image, and run the service tests.
+The client and its supervised `agent-index` service come from the Plow base
+image; this repo carries no copy. To update them, bump the `FROM` line to a
+newer immutable `base-<sha>@sha256:<digest>` tag, update the same tag in
+`tests/test_image_contract.py`, build the image, and run the tests.

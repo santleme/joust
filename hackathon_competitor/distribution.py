@@ -12,7 +12,6 @@ REQUIRED_FILES = {
     "README.md",
     "compose.yml",
     "pyproject.toml",
-    "vendor/client.pin",
 }
 FORBIDDEN_PARTS = {".git", ".knightwatch", "__pycache__", "plow-credentials"}
 FORBIDDEN_SUFFIXES = {".db", ".db-shm", ".db-wal", ".pyc", ".pyo"}

@@ -16,7 +16,6 @@ def _commit_distribution_fixture(root: Path) -> None:
         "README.md": "Docker Compose docker build plow-credentials AGENT_ID\n",
         "compose.yml": "services: {}\n",
         "pyproject.toml": "[project]\nname='fixture'\nversion='0.0.0'\n",
-        "vendor/client.pin": "sha=0123456789abcdef\npath=client.py\n",
     }
     for name, content in files.items():
         path = root / name
@@ -46,7 +45,7 @@ def test_public_bundle_uses_committed_tree_and_export_ignores_internal_metadata(
 
     summary = build_public_bundle(tmp_path, tmp_path / "dist/joust.zip")
 
-    assert summary["files"] == 7
+    assert summary["files"] == 6
     assert len(summary["sha256"]) == 64
     with zipfile.ZipFile(summary["path"]) as archive:
         assert "joust/plow-credentials" not in archive.namelist()
@@ -62,7 +61,6 @@ def test_public_bundle_rejects_secret_bearing_path(tmp_path):
             "README.md",
             "compose.yml",
             "pyproject.toml",
-            "vendor/client.pin",
         ):
             content = (
                 "MIT License\n"
@@ -74,3 +72,9 @@ def test_public_bundle_rejects_secret_bearing_path(tmp_path):
 
     with pytest.raises(ValueError, match="forbidden paths"):
         validate_public_bundle(bundle)
+
+
+def test_this_repo_builds_its_own_public_bundle(tmp_path):
+    """The reporter is the base image's now, so nothing here requires a client pin."""
+    root = Path(__file__).resolve().parents[1]
+    assert build_public_bundle(root, tmp_path / "joust.zip")["files"] > 0

@@ -11,8 +11,8 @@ def test_variant_uses_immutable_official_base_and_does_not_vendor_runtime():
         dockerfile,
         re.MULTILINE,
     )
-    assert "base-51f83158a70a383f03a4d03dbd8b6ea102cf0361" in dockerfile
-    assert "sha256:253d7ed3409effa7fa59113d93b4b79bb731d8264cdaf4cd60294924d0110a2e" in dockerfile
+    assert "base-ef0019372ff8bca593611b31ebd2e08f9f1458ff" in dockerfile
+    assert "sha256:a8a2f97ad78b8192d80a984dce81d3bf5a9a883d18cb7b677704913a09b56aee" in dockerfile
     assert not (ROOT / "image/s6-overlay/scripts/plow-init.py").exists()
     assert not (ROOT / "image/seed/SOUL.md").exists()
     assert (ROOT / "runtime/persona.md").is_file()
@@ -42,23 +42,13 @@ def test_variant_persona_has_model_driven_first_contact_onboarding():
     assert "not a keyword-triggered script or a deterministic branch" in persona
 
 
-def test_agent_index_client_and_supervision_are_pinned_and_wired():
-    pin = (ROOT / "vendor/client.pin").read_text()
+def test_usage_reporter_comes_from_the_base_image():
+    # The base ships the agent-index service and client; a copy here shadows it.
     dockerfile = (ROOT / "Dockerfile").read_text()
-    service = ROOT / "image/s6-overlay/s6-rc.d/agent-index"
-    assert re.search(r"^sha=[0-9a-f]{40}$", pin, re.MULTILINE)
-    assert re.search(r"^sha256=[0-9a-f]{64}$", pin, re.MULTILINE)
-    assert "sha256sum" in dockerfile
-    assert (service / "type").read_text().strip() == "longrun"
-    assert (service / "dependencies.d/plow-init").exists()
-    assert (ROOT / "image/s6-overlay/s6-rc.d/user/contents.d/agent-index").exists()
-
-
-def test_periodic_report_does_not_receive_the_plow_token():
-    run = (ROOT / "image/s6-overlay/s6-rc.d/agent-index/run").read_text()
-    report_block = run.split("  esac\n", 1)[1]
-    assert "PLOW_AGENT_TOKEN" not in report_block
-    assert "AGENT_ID" in report_block
+    assert "vendor/client.pin" not in dockerfile
+    assert not (ROOT / "vendor/client.pin").exists()
+    assert not (ROOT / "image/s6-overlay/s6-rc.d/agent-index").exists()
+    assert not (ROOT / "image/s6-overlay/s6-rc.d/user/contents.d/agent-index").exists()
 
 
 def test_secret_bearing_paths_are_excluded_from_git_and_build_context():
