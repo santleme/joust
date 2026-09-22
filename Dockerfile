@@ -3,7 +3,7 @@
 # this image owns only its persona, skills, and mission package.
 # Latest published base from the official main branch. Keep this immutable;
 # hosted provisioning injects the tenant environment at runtime.
-FROM public.ecr.aws/e1h7x4a2/plow-cloud-agents:base-ef0019372ff8bca593611b31ebd2e08f9f1458ff@sha256:a8a2f97ad78b8192d80a984dce81d3bf5a9a883d18cb7b677704913a09b56aee
+FROM public.ecr.aws/e1h7x4a2/plow-cloud-agents:base-67021a7029e33e80bcb27899be6515a5a0e9b37b@sha256:0c3892e93c1a001c61fb7106396e0a4b7e0219008184fd90719caa84a3390ff0
 
 # GitHub is part of Joust's execution/observation plane. Keep the package
 # version explicit so a rebuild cannot silently change the CLI contract.

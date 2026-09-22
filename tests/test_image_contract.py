@@ -11,7 +11,7 @@ def test_variant_uses_immutable_official_base_and_does_not_vendor_runtime():
         dockerfile,
         re.MULTILINE,
     )
-    assert "base-ef0019372ff8bca593611b31ebd2e08f9f1458ff" in dockerfile
+    assert "base-67021a7029e33e80bcb27899be6515a5a0e9b37b" in dockerfile
     assert "sha256:a8a2f97ad78b8192d80a984dce81d3bf5a9a883d18cb7b677704913a09b56aee" in dockerfile
     assert not (ROOT / "image/s6-overlay/scripts/plow-init.py").exists()
     assert not (ROOT / "image/seed/SOUL.md").exists()
